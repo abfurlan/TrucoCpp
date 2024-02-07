@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Model/CardModel.h"
+#include "../ViewModel/MainPageViewModel.h"
 #include <SFML/Graphics.hpp>
 
 class MainPage
@@ -17,9 +19,11 @@ private:
 	sf::Sprite card2P1Sprite;
 	sf::Texture card3P1Image;
 	sf::Sprite card3P1Sprite;
+	MainPageViewModel viewModel;
 
 	void PageConfiguration();
 	void CloseMainPage();
 	void DrawComponents();
-	void WriteImages();
+	void WriteImages(std::string card1, std::string card2, std::string card3);
+	std::string MainPage::TranslateCardIntoImageName(CardModel card);
 };

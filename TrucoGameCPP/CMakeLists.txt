@@ -22,7 +22,7 @@ FetchContent_MakeAvailable(SFML)
 file(COPY Assets DESTINATION ${CMAKE_BINARY_DIR}/bin)
 
 # Add source to this project's executable.
-add_executable (TrucoCPP "TrucoGameCPP.cpp" "TrucoGameCPP.h" "Model/CardModel.cpp" "View/View.cpp" "ViewModel/MainPageViewModel.cpp" "Services/Service.cpp" "View/View.h" "ViewModel/MainPageViewModel.h" "Controls/Scoreboard.h" "Model/PlayerModel.cpp")
+add_executable (TrucoCPP "TrucoGameCPP.cpp" "TrucoGameCPP.h" "Model/CardModel.cpp" "View/View.cpp" "ViewModel/MainPageViewModel.cpp" "Services/Service.cpp" "View/View.h" "ViewModel/MainPageViewModel.h" "Controls/Scoreboard.h" "Model/PlayerModel.cpp" "Model/CardEnums.h" "Model/CardModel.h")
 
 target_link_libraries(TrucoCPP sfml-graphics)
 

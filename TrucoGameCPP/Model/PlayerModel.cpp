@@ -1,41 +1,35 @@
 #pragma once
 
+#include "PlayerModel.h"
 #include <string>
 #include <list>
 
-class PlayerModel
+std::string PlayerModel::GetName()
 {
-	std::string name;
-	int player;
-	std::list<std::string> hand;
+	return name;
+}
 
-	std::string getName()
-	{
-		return name;
-	}
+void PlayerModel::SetName(std::string name)
+{
+	this->name = name;
+}
 
-	void setName(std::string name)
-	{
-		this->name = name;
-	}
+int PlayerModel::GetPlayer()
+{
+	return player;
+}
 
-	int getPlayer()
-	{
-		return player;
-	}
+void PlayerModel::SetPlayer(int player)
+{
+	this->player = player;
+}
 
-	void setPlayer(int player)
-	{
-		this->player = player;
-	}
+std::list<CardModel> PlayerModel::GetHand()
+{
+	return hand;
+}
 
-	std::list<std::string> getHand() 
-	{
-		return hand;
-	}
-
-	void setHand(std::list<std::string> hand)
-	{
-		this->hand = hand;
-	}
-};
+void PlayerModel::SetHand(std::list<CardModel> hand)
+{
+	this->hand = hand;
+}
