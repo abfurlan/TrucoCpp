@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include "../Model/CardModel.h"
@@ -14,6 +15,7 @@ public:
 	MainPageViewModel();
 	void InitializeDeck();
 	void InitializePlayers();
+	std::string TranslateCardIntoImageName(CardModel card);
 	PlayerModel GetP1();
 	PlayerModel GetP2();
 	void Dispose();

@@ -5,10 +5,7 @@
 #include <vector>
 #include <random>
 
-MainPageViewModel::MainPageViewModel()
-{
-
-}
+MainPageViewModel::MainPageViewModel(){}
 
 void MainPageViewModel::InitializeDeck()
 {
@@ -70,6 +67,63 @@ void MainPageViewModel::DistributeCards()
 
 	p1Hand.clear();
 	p2Hand.clear();
+}
+
+std::string MainPageViewModel::TranslateCardIntoImageName(CardModel card)
+{
+    std::string ret = "./Assets/";
+    switch (card.GetCardNumber())
+    {
+    case CardEnums::Four:
+        ret += "4";
+        break;
+    case CardEnums::Five:
+        ret += "5";
+        break;
+    case CardEnums::Six:
+        ret += "6";
+        break;
+    case CardEnums::Seven:
+        ret += "7";
+        break;
+    case CardEnums::Queen:
+        ret += "Q";
+        break;
+    case CardEnums::Jack:
+        ret += "J";
+        break;
+    case CardEnums::King:
+        ret += "K";
+        break;
+    case CardEnums::Ace:
+        ret += "A";
+        break;
+    case CardEnums::Two:
+        ret += "2";
+        break;
+    case CardEnums::Three:
+        ret += "3";
+        break;
+    }
+
+    ret += "_";
+    switch (card.GetSuit()) {
+    case CardEnums::Diamonds:
+        ret += "ouro";
+        break;
+    case CardEnums::Spades:
+        ret += "espadas";
+        break;
+    case CardEnums::Hearts:
+        ret += "copa";
+        break;
+    case CardEnums::Clubs:
+        ret += "paus";
+        break;
+    }
+
+    ret += ".png";
+    return ret;
 }
 
 PlayerModel MainPageViewModel::GetP1()

@@ -5,6 +5,7 @@ class CardModel
 {
 public:
 	CardModel() {}
+
 	CardEnums::CardNumber GetCardNumber();
 	CardEnums::Suit GetSuit();
 	void SetCardNumber(CardEnums::CardNumber number);
