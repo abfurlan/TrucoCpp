@@ -3,6 +3,7 @@
 #include "../Model/CardModel.h"
 #include "../ViewModel/MainPageViewModel.h"
 #include <SFML/Graphics.hpp>
+#include <list>
 
 class MainPage
 {
@@ -10,20 +11,20 @@ public:
 	MainPage();
 
 private:
+	MainPageViewModel viewModel;
+
+	const int NEXT_POSITION = 120;
 	sf::RenderWindow mainWindow;
 	sf::Texture backgroundImage;
 	sf::Sprite spriteBackground;
-	sf::Texture card1P1Image;
-	sf::Sprite card1P1Sprite;
-	sf::Texture card2P1Image;
-	sf::Sprite card2P1Sprite;
-	sf::Texture card3P1Image;
-	sf::Sprite card3P1Sprite;
-	MainPageViewModel viewModel;
+	std::list<sf::Texture> cardsImages;
+	std::list<sf::Sprite> cardsSprites;
 
 	void PageConfiguration();
+	void InitializingPlayers();
 	void CloseMainPage();
 	void DrawComponents();
-	void WriteImages(std::string card1, std::string card2, std::string card3);
-	std::string MainPage::TranslateCardIntoImageName(CardModel card);
+	void WriteImages(std::vector<std::string> cardsImagesList);
+	void WriteSprites();
+	std::string TranslateCardIntoImageName(CardModel card);
 };
