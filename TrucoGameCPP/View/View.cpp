@@ -61,6 +61,7 @@ void MainPage::InitializingPlayers()
     cardsImagesList.push_back(viewModel.TranslateCardIntoImageName(manilla));
 
     WriteImages(cardsImagesList);
+    //viewModel.Player1WonTheRound(viewModel.PickRandomCard(), viewModel.PickRandomCard(), viewModel.PickRandomCard());
 }
 
 void MainPage::CloseMainPage()
@@ -73,7 +74,6 @@ void MainPage::DrawComponents()
 {
     mainWindow.draw(spriteBackground);
     mainWindow.draw(spriteCardPile);
-
     WritePlayerSprites();
 }
 
