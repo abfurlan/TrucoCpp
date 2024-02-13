@@ -20,6 +20,7 @@ public:
 	PlayerModel GetP1();
 	PlayerModel GetP2();
 	void Dispose();
+	int Player1WonTheRound(CardModel p1Card, CardModel p2Card, CardModel manilla);
 
 private:
 	Deck deck;
@@ -27,4 +28,5 @@ private:
 	PlayerModel player2;
 
 	void DistributeCards();
+	bool isManilla(CardModel card, CardModel manilla);
 };

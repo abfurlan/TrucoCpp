@@ -137,7 +137,49 @@ PlayerModel MainPageViewModel::GetP2()
 	return player2;
 }
 
+bool MainPageViewModel::isManilla(CardModel card, CardModel manilla)
+{
+    if (manilla.GetCardNumber() - card.GetCardNumber() == -1 || manilla.GetCardNumber() - card.GetCardNumber() == 9)
+        return true;
+
+    return false;
+}
+
+int MainPageViewModel::Player1WonTheRound(CardModel p1Card, CardModel p2Card, CardModel manilla)
+{
+    bool p1HasManilla, p2HasManilla;
+    p1HasManilla = isManilla(p1Card, manilla);
+    p2HasManilla = isManilla(p2Card, manilla);
+    int p1CardNumber = p1Card.GetCardNumber();
+    int p2CardNumber = p2Card.GetCardNumber();
+
+    if (!p1HasManilla && !p2HasManilla)
+    {
+        if (p1CardNumber > p2CardNumber)
+            return 1;
+        else if (p1CardNumber < p2CardNumber)
+            return -1;
+        else if (p1CardNumber == p2CardNumber)
+            return 0;
+    }
+    else if (p1HasManilla && !p2HasManilla)
+    {
+        return 1;
+    }
+    else if (!p1HasManilla && p2HasManilla)
+    {
+        return -1;
+    }
+    else
+    {
+        if (p1Card.GetSuit() > p2Card.GetSuit())
+            return 1;
+        else
+            return -1;
+    }
+}
+
 void MainPageViewModel::Dispose()
 {
-	deck.cards.clear();
+    deck.cards.clear();
 }
