@@ -15,6 +15,7 @@ public:
 	MainPageViewModel();
 	void InitializeDeck();
 	void InitializePlayers();
+	CardModel PickRandomCard();
 	std::string TranslateCardIntoImageName(CardModel card);
 	PlayerModel GetP1();
 	PlayerModel GetP2();
@@ -26,5 +27,4 @@ private:
 	PlayerModel player2;
 
 	void DistributeCards();
-	CardModel PickRandomCard();
 };

@@ -52,7 +52,8 @@ void MainPageViewModel::DistributeCards()
 {
 	std::list<CardModel> p1Hand;
 	std::list<CardModel> p2Hand;
-	for (int i = 0; i < 3; i++)
+	
+    for (int i = 0; i < 3; i++)
 	{
 		p1Hand.push_front(PickRandomCard());
 	}

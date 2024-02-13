@@ -25,11 +25,16 @@ MainPage::MainPage()
 
 void MainPage::PageConfiguration()
 {
-    mainWindow.create(sf::VideoMode(1200, 800), "Jogo de Truco - Curso C++ Unicamp");
+    mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Jogo de Truco - Curso C++ Unicamp");
 
     backgroundImage.loadFromFile("./Assets/main_bg.jpg");
     spriteBackground.setTexture(backgroundImage);
     spriteBackground.setScale(sf::Vector2f(1, 1));
+
+    cardPileImage.loadFromFile("./Assets/Card_pile.png");
+    spriteCardPile.setTexture(cardPileImage);
+    spriteCardPile.setScale(sf::Vector2f(0.25, 0.25));
+    spriteCardPile.setPosition(sf::Vector2f(1020, 310));
 }
 
 void MainPage::InitializingPlayers()
@@ -38,16 +43,24 @@ void MainPage::InitializingPlayers()
     viewModel.InitializePlayers();
 
     std::list<CardModel>::iterator it;
-    std::vector<std::string> cardsImagesList;
-    std::list<CardModel> hand = viewModel.GetP1().GetHand();
+    std::list<std::string> cardsImagesList;
+    std::list<CardModel> p1Hand = viewModel.GetP1().GetHand();
+    std::list<CardModel> pcHand = viewModel.GetP2().GetHand();
+    manilla = viewModel.PickRandomCard();
 
-    for (auto const& i : hand)
+    for (auto const& i : p1Hand)
     {
-        cardsImagesList.insert(cardsImagesList.begin(), viewModel.TranslateCardIntoImageName(i));
+        cardsImagesList.push_back(viewModel.TranslateCardIntoImageName(i));
     }
 
+    for (auto const& i : pcHand)
+    {
+        cardsImagesList.push_back(viewModel.TranslateCardIntoImageName(i));
+    }
+
+    cardsImagesList.push_back(viewModel.TranslateCardIntoImageName(manilla));
+
     WriteImages(cardsImagesList);
-    //WriteSprites();
 }
 
 void MainPage::CloseMainPage()
@@ -59,12 +72,15 @@ void MainPage::CloseMainPage()
 void MainPage::DrawComponents()
 {
     mainWindow.draw(spriteBackground);
+    mainWindow.draw(spriteCardPile);
 
-    WriteSprites();
+    WritePlayerSprites();
 }
 
-void MainPage::WriteImages(std::vector<std::string> cardsImagesList)
+void MainPage::WriteImages(std::list<std::string> cardsImagesList)
 {
+    manillaImage.loadFromFile(viewModel.TranslateCardIntoImageName(manilla));
+
     for (std::string assetName : cardsImagesList) 
     {
         sf::Texture card;
@@ -74,22 +90,56 @@ void MainPage::WriteImages(std::vector<std::string> cardsImagesList)
     }
 }
 
-void MainPage::WriteSprites()
+void MainPage::WritePlayerSprites()
 {
-    int x_position = 310;
-    int y_position = 640;
+    int x_positionP1 = 310;
+    int y_positionP1 = 640;
+    int x_positionP2 = 310;
+    int y_positionP2 = 10;
+    int index = 0;
 
     for (sf::Texture texture : cardsImages)
     {
-        x_position += NEXT_POSITION;
+        if (index <= 2)
+        {
+            x_positionP1 += NEXT_POSITION;
 
-        sf::Sprite sprite;
-        sprite.setTexture(texture);
-        sprite.setScale(sf::Vector2f(0.2, 0.2));
-        sprite.setPosition(sf::Vector2f(x_position, y_position));
+            sf::Sprite sprite;
+            sprite.setTexture(texture);
+            sprite.setScale(sf::Vector2f(0.2, 0.2));
+            sprite.setPosition(sf::Vector2f(x_positionP1, y_positionP1));
 
-        mainWindow.draw(sprite);
+            mainWindow.draw(sprite);
+
+            index++;
+        }
+
+        else if (index <= 5)
+        {
+            x_positionP2 += NEXT_POSITION;
+
+            sf::Texture card;
+            card.loadFromFile("./Assets/Back_cards.png");
+            card.setSmooth(true);
+            cardsImages.push_back(card);
+
+            sf::Sprite sprite;
+            sprite.setTexture(card);
+            sprite.setScale(sf::Vector2f(0.2, 0.2));
+            sprite.setPosition(sf::Vector2f(x_positionP2, y_positionP2));
+
+            mainWindow.draw(sprite);
+
+            index++;
+        }
+        else
+        {
+            spriteManilla.setTexture(manillaImage);
+            spriteManilla.setScale(sf::Vector2f(0.25, 0.25));
+            spriteManilla.setPosition(sf::Vector2f(870, 310));
+
+            mainWindow.draw(spriteManilla);
+        }
+
     }
-
-    //cardsImages.clear();
 }
