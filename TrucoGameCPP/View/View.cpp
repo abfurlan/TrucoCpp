@@ -15,6 +15,12 @@ MainPage::MainPage()
         {
             if (event.type == sf::Event::Closed)
                 CloseMainPage();
+            
+            if (event.type == sf::Event::MouseButtonPressed) 
+            {
+                std::cout << "Mouse pressed" << std::endl;
+            }
+             
         }
 
         mainWindow.clear();
