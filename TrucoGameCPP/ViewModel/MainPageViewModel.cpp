@@ -137,19 +137,29 @@ PlayerModel MainPageViewModel::GetP2()
 	return player2;
 }
 
-bool MainPageViewModel::isManilla(CardModel card, CardModel manilla)
+int MainPageViewModel::GetManilla()
 {
-    if (manilla.GetCardNumber() - card.GetCardNumber() == -1 || manilla.GetCardNumber() - card.GetCardNumber() == 9)
+    return this->manilla;
+}
+
+void MainPageViewModel::SetManilla(int manillaNumber)
+{
+    this->manilla = manillaNumber;
+}
+
+bool MainPageViewModel::isManilla(CardModel card)
+{
+    if (manilla - card.GetCardNumber() == -1 || manilla - card.GetCardNumber() == 9)
         return true;
 
     return false;
 }
 
-int MainPageViewModel::Player1WonTheRound(CardModel p1Card, CardModel p2Card, CardModel manilla)
+int MainPageViewModel::Player1WonTheRound(CardModel p1Card, CardModel p2Card)
 {
     bool p1HasManilla, p2HasManilla;
-    p1HasManilla = isManilla(p1Card, manilla);
-    p2HasManilla = isManilla(p2Card, manilla);
+    p1HasManilla = isManilla(p1Card);
+    p2HasManilla = isManilla(p2Card);
     int p1CardNumber = p1Card.GetCardNumber();
     int p2CardNumber = p2Card.GetCardNumber();
 
@@ -177,6 +187,331 @@ int MainPageViewModel::Player1WonTheRound(CardModel p1Card, CardModel p2Card, Ca
         else
             return -1;
     }
+}
+
+CardModel MainPageViewModel::BotPlayHighestCard()
+{
+    int highestCard = 0;
+    CardModel ret;
+    for (auto card : player2.GetHand())
+    {
+        if (isManilla(card))
+        {
+            if (highestCard > 0)
+            {
+                if (!isManilla(ret))
+                {
+                    ret = card;
+                    highestCard = ret.GetCardNumber();
+                }
+                else
+                {
+                    if (card.GetSuit() > ret.GetSuit())
+                    {
+                        ret = card;
+                        highestCard = ret.GetCardNumber();
+                    }
+                }
+            }
+            else
+            {
+                ret = card;
+                highestCard = ret.GetCardNumber();
+            }
+        }
+        else
+        {
+            if (highestCard > 0)
+            {
+                if (!isManilla(ret))
+                {
+                    if (card.GetCardNumber() > highestCard)
+                    {
+                        ret = card;
+                        highestCard = ret.GetCardNumber();
+                    }
+                }
+            }
+            else
+            {
+                ret = card;
+                highestCard = ret.GetCardNumber();
+            }
+        }
+    }
+
+    return ret;
+}
+
+CardModel MainPageViewModel::BotPlayLowestCard()
+{
+    int lowestCard = 11;
+    CardModel ret;
+    for (auto card : player2.GetHand())
+    {
+        if (!isManilla(card))
+        {
+            if (card.GetCardNumber() < lowestCard)
+            {
+                ret = card;
+                lowestCard = ret.GetCardNumber();
+            }
+        }
+        else
+        {
+            if (lowestCard < 11)
+            {
+                if (isManilla(ret))
+                {
+                    if (card.GetSuit() < ret.GetSuit())
+                    {
+                        ret = card;
+                        lowestCard = ret.GetCardNumber();
+                    }
+                }
+            }
+            else
+            {
+                ret = card;
+                lowestCard = ret.GetCardNumber();
+            }
+        }
+    }
+
+    return ret;
+}
+
+bool MainPageViewModel::BotHasManilla()
+{
+    for (auto card : player2.GetHand())
+    {
+        if (isManilla(card))
+            return true;
+    }
+
+    return false;
+}
+
+bool MainPageViewModel::BotHasTwoManillas()
+{
+    int manillaCount = 0;
+    for (auto card : player2.GetHand())
+    {
+        if (isManilla(card))
+            manillaCount++;
+    }
+
+    if (manillaCount > 1)
+        return true;
+    else
+        return false;
+}
+
+bool MainPageViewModel::BotHasZapOrHearts()
+{
+    for (auto card : player2.GetHand())
+    {
+        if (isManilla(card))
+        {
+            if (card.GetSuit() == CardEnums::Suit::Clubs || card.GetSuit() == CardEnums::Suit::Hearts)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+//in this method, if bot has a higher card than yours, it returns 1; 0 if it has a card equals to yours and -1 if it has nothing
+int MainPageViewModel::BotHasCardHigherThan(CardModel p1Card)
+{
+    int ret = -1;
+    if (isManilla(p1Card))
+    {
+        for (auto card : player2.GetHand())
+        {
+            if (isManilla(card))
+                if (card.GetSuit() > p1Card.GetSuit())
+                    ret = 1;
+        }
+    }
+    else
+    {
+        if (BotHasManilla())
+            ret = 1;
+        else
+        {
+            for (auto card : player2.GetHand())
+            {
+                if (card.GetCardNumber() > p1Card.GetCardNumber())
+                    ret = 1;
+                else if (card.GetCardNumber() == p1Card.GetCardNumber())
+                    ret = 0;
+            }
+        }
+    }
+
+    return ret;
+}
+
+void MainPageViewModel::RemoveCardFromBotHand(CardModel playedCard)
+{
+    player2.RemoveCardFromHand(playedCard);
+}
+
+
+
+CardModel MainPageViewModel::BotPlayCard(int round, bool firstInRound, int botRounds)
+{
+    CardModel playedCard;
+    if (firstInRound)
+    {
+        if (round == 1)
+        {
+            if (BotHasTwoManillas())
+                playedCard = BotPlayLowestCard();
+            else
+                playedCard = BotPlayHighestCard();
+
+            RemoveCardFromBotHand(playedCard);
+        }
+        else if (round == 2)
+        {
+            if (botRounds == 1 && BotHasZapOrHearts())
+                playedCard = BotPlayLowestCard();
+            else
+                playedCard = BotPlayHighestCard();
+
+            RemoveCardFromBotHand(playedCard);
+        }
+        else
+        {
+            playedCard = BotPlayHighestCard();
+            RemoveCardFromBotHand(playedCard);
+        }
+    }
+    else
+    {
+        if (round == 1)
+        {
+            if (BotHasTwoManillas())
+                playedCard = BotPlayLowestCard();
+            else
+            {
+                if (BotHasCardHigherThan(p1PlayedCard) > -1)
+                    playedCard = BotPlayHighestCard();
+                else
+                    playedCard = BotPlayLowestCard();
+
+            }
+
+            RemoveCardFromBotHand(playedCard);
+        }
+        else if (round == 2)
+        {
+            playedCard = BotPlayHighestCard();
+            RemoveCardFromBotHand(playedCard);
+        }
+        else
+        {
+            playedCard = BotPlayHighestCard();
+            RemoveCardFromBotHand(playedCard);
+        }
+    }
+
+    return playedCard;
+}
+
+float MainPageViewModel::CountBotCardsPower()
+{
+    float botTotalPoints = 0;
+    for (auto card : player2.GetHand())
+    {
+        if (!isManilla(card))
+            botTotalPoints += card.GetCardNumber();
+    }
+
+    return botTotalPoints;
+}
+
+bool MainPageViewModel::BotHasGoodHand(int round)
+{
+    float botTotalPoints = CountBotCardsPower();
+    float acceptableCardsPower = 0;
+
+    if (round == 1)
+        acceptableCardsPower = 7;
+    else if (round == 2)
+        acceptableCardsPower = 9;
+    else
+        acceptableCardsPower = 8;
+
+    if (BotHasManilla())
+    {
+        if (botTotalPoints >= acceptableCardsPower)
+            return true;
+        else
+            return false;
+    }
+    else
+    {
+        if (botTotalPoints / player2.GetHand().size() > acceptableCardsPower)
+            return true;
+        else
+            return false;
+    }
+}
+
+//in this method, if bot wants to raise even more, it returns 1; 0 if it just accepts and -1 if it does not
+int MainPageViewModel::BotAcceptTruco(int round, int botRounds)
+{
+    int ret;
+    if (BotHasTwoManillas())
+    {
+        if (BotHasZapOrHearts())
+            ret = 1;
+        else
+            ret = 0;
+    }
+    else
+    {
+        if (round == 1)
+        {
+            if (BotHasGoodHand(round))
+                ret = 0;
+            else
+                ret = -1;
+        }
+        else if (round == 2)
+        {
+            if (botRounds > 0)
+            {
+                if (BotHasZapOrHearts())
+                    ret = 1;
+                else if (BotHasGoodHand(round))
+                    ret = 0;
+                else
+                    ret = -1;
+            }
+            else
+                ret = -1;
+        }
+        else
+        {
+            if (botRounds > 0)
+            {
+                if (BotHasZapOrHearts())
+                    ret = 1;
+                else if (BotHasGoodHand(round))
+                    ret = 0;
+                else
+                    ret = -1;
+            }
+            else
+                ret = -1;
+        }
+    }
+
+    return ret;
 }
 
 void MainPageViewModel::Dispose()

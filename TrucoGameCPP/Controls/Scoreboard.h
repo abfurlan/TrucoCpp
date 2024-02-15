@@ -4,12 +4,16 @@ class Scoreboard
 {
 public:
 	Scoreboard();
-	void setRound(int round);
-	int getRound();
-	void setTotalPoints(int totalPoints);
-	int getTotalPoints();
+	int GetP1Round();
+	int GetP1TotalPoints();
+	int GetP2Round();
+	int GetP2TotalPoints();
+	void SetTotalPoints(int winningPlayer, int earnedPoints);
+	void SetRounds(int winningPlayer, int roundValue);
 
 private:
-	int round;
-	int totalPoints;
+	int p1Rounds;
+	int p2Rounds;
+	int p1TotalPoints;
+	int p2TotalPoints;
 };

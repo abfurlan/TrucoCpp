@@ -33,3 +33,8 @@ void PlayerModel::SetHand(std::list<CardModel> hand)
 {
 	this->hand = hand;
 }
+
+void PlayerModel::RemoveCardFromHand(CardModel cardPlayed)
+{
+	this->hand.remove(cardPlayed);
+}

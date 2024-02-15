@@ -47,6 +47,7 @@ void MainPage::InitializingPlayers()
     std::list<CardModel> p1Hand = viewModel.GetP1().GetHand();
     std::list<CardModel> pcHand = viewModel.GetP2().GetHand();
     manilla = viewModel.PickRandomCard();
+    viewModel.SetManilla(manilla.GetCardNumber());
 
     for (auto const& i : p1Hand)
     {
@@ -62,6 +63,9 @@ void MainPage::InitializingPlayers()
 
     WriteImages(cardsImagesList);
     //viewModel.Player1WonTheRound(viewModel.PickRandomCard(), viewModel.PickRandomCard(), viewModel.PickRandomCard());
+    //viewModel.p1PlayedCard = viewModel.PickRandomCard();
+    //CardModel botCard = viewModel.BotPlayCard(1, false, 0);
+    //viewModel.BotAcceptTruco(2, 1);
 }
 
 void MainPage::CloseMainPage()

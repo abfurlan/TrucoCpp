@@ -13,6 +13,7 @@ public:
 	void PlayerModel::SetName(std::string name);
 	void PlayerModel::SetPlayer(int player);
 	void PlayerModel::SetHand(std::list<CardModel> hand);
+	void PlayerModel::RemoveCardFromHand(CardModel cardPlayed);
 
 private:
 	std::string name;
