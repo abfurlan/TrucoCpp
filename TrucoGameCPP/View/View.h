@@ -25,6 +25,8 @@ private:
 	sf::Sprite spriteManilla;
 	std::list<sf::Texture> cardsImages;
 	std::list<sf::Sprite> cardsSprites;
+	std::list<sf::Sprite>* computerHand = new std::list<sf::Sprite>;
+	std::list<sf::Sprite>* playerHand = new std::list<sf::Sprite>;
 	CardModel manilla;
 
 	void PageConfiguration();
@@ -34,4 +36,5 @@ private:
 	void WriteImages(std::list<std::string> cardsImagesList);
 	void WritePlayerSprites();
 	std::string TranslateCardIntoImageName(CardModel card);
+
 };
