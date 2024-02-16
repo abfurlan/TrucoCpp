@@ -25,6 +25,7 @@ MainPage::MainPage()
 
         mainWindow.clear();
         DrawComponents();
+        
         mainWindow.display();
     }
 }
@@ -118,7 +119,8 @@ void MainPage::WritePlayerSprites()
             sprite.setTexture(texture);
             sprite.setScale(sf::Vector2f(0.2, 0.2));
             sprite.setPosition(sf::Vector2f(x_positionP1, y_positionP1));
-
+            
+            
             mainWindow.draw(sprite);
 
             index++;
@@ -140,6 +142,7 @@ void MainPage::WritePlayerSprites()
 
             mainWindow.draw(sprite);
 
+            computerHand->push_back(sprite);
             index++;
         }
         else
@@ -150,6 +153,20 @@ void MainPage::WritePlayerSprites()
 
             mainWindow.draw(spriteManilla);
         }
+   
+    }
 
+    sf::Sprite* computerChosen = &computerHand->front();
+
+    if (computerChosen->getPosition().y < 300 ) 
+    {
+        computerChosen->move(sf::Vector2f(0, 25));
+        mainWindow.draw(*computerChosen);
+    }
+    else
+    {
+        computerChosen->setPosition(sf::Vector2f(430, 300));
+        mainWindow.draw(*computerChosen);
     }
 }
+
